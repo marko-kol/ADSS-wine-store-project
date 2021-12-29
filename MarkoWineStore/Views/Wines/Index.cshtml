@@ -1,0 +1,63 @@
+﻿@model IEnumerable<MarkoWineStore.Models.Wine>
+
+@{
+    ViewData["Title"] = "Wines";
+}
+
+<style>
+h1 {text-align: center;}
+</style>
+
+<h1>List of wines</h1>
+
+@{
+    if (User.IsInRole("Editor") || User.IsInRole("Admin")){
+        <a asp-action="Create">Create New</a>
+    }
+}
+
+<form asp-controller="Wines" asp-action="Index">
+    <p>
+        <div class="input-group">
+             <input type="search" name="SearchString" class="form-control rounded" placeholder="Search" aria-label="Search"
+  aria-describedby="search-addon" />
+             <button type="submit" class="btn btn-outline-primary">Search</button>
+        </div>
+    </p>
+</form>
+
+
+<div class="container-fluid">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-col-lg-3 col-md-4 col-6">
+                <div class="m-2 p-3 border rounded bg-white">
+@*                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>*@
+                <img src=@Html.DisplayFor(modelItem => item.Picture) class="img-fluid">
+                <h5>@Html.DisplayFor(modelItem => item.Name)</h5>
+                @Html.DisplayFor(modelItem => item.Price) MKD
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="text-center">
+@if (ViewBag.Page > 0)
+{
+    <a href="@Url.Action("Index", new { page = ViewBag.Page - 1 })" 
+       class="btn btn-default">
+        &laquo; @ViewBag.Page
+    </a>
+}
+
+<span class="btn btn-default">@(@ViewBag.Page+1)</span>
+@if (ViewBag.Page < ViewBag.MaxPage)
+{
+    <a href="@Url.Action("Index", new { page = ViewBag.Page + 1 })" 
+       class="btn btn-default">
+        @(@ViewBag.Page+2) &raquo;
+    </a>
+}
+</div>
